@@ -1,0 +1,9 @@
+{
+    "path": "/tasks/1",
+    "httpMethod": "PUT",
+    "body": {"task_id": 1, "description": "feed the cat", "completed": true, "user_id": 1},
+    "headers":
+        {
+            "Content-Type":"application/json"
+        }
+}

@@ -1,0 +1,41 @@
+# Welcome to serverless. Read the docs
+# https://serverless.com/framework/docs/
+
+# Serverless.yml is the configuration the CLI
+# uses to deploy your code to your provider of choice
+
+service: tasks-service 
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  region: eu-west-2
+
+functions:
+  tasks:
+    handler: tasks.handler
+    events:
+      - http:
+          path: tasks
+          method: get
+          cors: true
+      - http:
+          path: tasks/userid/{userId}
+          method: get
+          cors: true
+      - http:
+          path: tasks/{taskId}
+          method: get
+          cors: true
+      - http:
+          path: tasks
+          method: post
+          cors: true
+      - http:
+          path: tasks/{taskId}
+          method: put
+          cors: true 
+      - http:
+          path: tasks/{taskId}
+          method: DELETE
+          cors: true 

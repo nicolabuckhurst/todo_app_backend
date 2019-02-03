@@ -1,0 +1,9 @@
+{
+    "path": "/tasks",
+    "httpMethod": "POST",
+    "body": {"task_id":4,"description":"new task", "completed": false, "user_id":3},
+    "headers":
+        {
+            "Content-Type":"application/json"
+        }
+}
