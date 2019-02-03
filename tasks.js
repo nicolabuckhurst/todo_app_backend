@@ -5,11 +5,13 @@ const app = express();
 
 app.use(bodyparser.json())
 
-let arrayOfTasks = [
+const arrayOfTasksDefault = [
   {'task_id': 1, 'description': "feed the cat", 'completed': false, 'user_id': 1},
   {'task_id': 2, 'description': "pick up groceries", 'completed': false, 'user_id': 1},
   {'task_id': 3, 'description': "cook dinner", 'completed': false, 'user_id': 2}
 ];
+
+let arrayOfTasks = arrayOfTasksDefault;
 
 //filter task by supplied key and value
 function filterTasksByParameter(key, value) {
@@ -119,6 +121,13 @@ app.delete('/tasks/:taskId', function(req,res){
     console.log(arrayOfTasks)
     res.status(200).send("task deleted");
 
+})
+
+//reset tasks to default
+app.get('/taskreset', function(req, res){
+  arrayOfTasks = arrayOfTasksDefault;
+  console.log(arrayOfTasks);
+  res.status(200).send("tasks reset to default");
 })
 
 module.exports.handler = serverless(app);

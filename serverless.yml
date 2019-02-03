@@ -39,3 +39,8 @@ functions:
           path: tasks/{taskId}
           method: DELETE
           cors: true 
+      - http:
+          path: taskreset
+          method: get
+          cors: true 
+          
