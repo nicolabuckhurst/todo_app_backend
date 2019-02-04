@@ -12,7 +12,7 @@ let arrayOfTasks = [
 ];
 
 //filter task by supplied key and value
-function filterTasksByParameter(key, value) {
+const filterTasksByParameter = function (key, value) {
   let filteredArray =[];
   filteredArray = arrayOfTasks.filter((element)=>element[key]==value);
   console.log(filteredArray)
@@ -21,7 +21,8 @@ function filterTasksByParameter(key, value) {
 
 
 //check to see if the task received has correct fields and they are of the correct type
-function checkJSONTask(receivedTask){
+const checkJSONTask = function(receivedTask){
+  console.log(receivedTask)
   const expectedData = {task_id: 'number', description: 'string', completed: 'boolean', user_id: 'number'}
   const expectedKeys = Object.keys(expectedData);
   const receivedKeys = Object.keys(receivedTask);
@@ -34,7 +35,7 @@ function checkJSONTask(receivedTask){
     
   for (const key in receivedTask) {
     if(expectedData[key] != (typeof receivedTask[key])){
-      throw "did not receive task with valid" + key
+      throw "did not receive task with valid " + key
     }
   }    
 
@@ -121,4 +122,8 @@ app.delete('/tasks/:taskId', function(req,res){
 
 })
 
-module.exports.handler = serverless(app);
+module.exports = {
+  handler: serverless(app),
+  checkJSONTask: checkJSONTask,
+  filterTasksByParameter: filterTasksByParameter
+}
