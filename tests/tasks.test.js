@@ -1,4 +1,5 @@
 const tasks = require('../tasks.js');
+const serverless = require('serverless-http');
 
 describe("unit tests for tasks function", ()=>{
 
