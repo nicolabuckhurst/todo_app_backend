@@ -10,6 +10,7 @@ provider:
   name: aws
   runtime: nodejs8.10
   region: eu-west-2
+  environment: ${file(../todo_app_backend_config/serverless_env.json)}
 
 functions:
   tasks:
