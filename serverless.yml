@@ -10,7 +10,11 @@ provider:
   name: aws
   runtime: nodejs8.10
   region: eu-west-2
-  environment: ${file(../todo_app_backend_config/serverless_env.json)}
+  environment: 
+    RDS_HOST: ${file(../todo_app_backend_config/serverless_env.json):RDS_HOST}
+    RDS_USER: ${file(../todo_app_backend_config/serverless_env.json):RDS_USER}
+    RDS_PASSWORD: ${file(../todo_app_backend_config/serverless_env.json):RDS_PASSWORD}
+    RDS_DATABASE: ${file(../todo_app_backend_config/serverless_env.json):RDS_DATABASE}
 
 functions:
   tasks:
@@ -33,7 +37,7 @@ functions:
           method: post
           cors: true
       - http:
-          path: tasks/{taskId}
+          path: tasks
           method: put
           cors: true 
       - http:

@@ -80,11 +80,9 @@ app.post('/tasks', function(req, res){
 })
 
 //update a task
-app.put('/tasks/:taskId', function(req,res){
+app.put('/tasks', function(req,res){
     
   const newTaskDetails = req.body;
-  const taskToUpdate = req.params.taskId
-  let newArrayOfTasks = []
 
   try {
     checkTasks.checkJSONTask(newTaskDetails);

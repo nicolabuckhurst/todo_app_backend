@@ -78,7 +78,7 @@ describe("Test routes against local version of express app", ()=>{
             .then(function(task){
              const newTaskDetails = {"taskId": task["taskId"], "taskDescription": task["taskDescription"], "taskCompleted": 1, "userId": task["userId"]}
              return request(app)
-                .put('/tasks/'+ task['taskId'])
+                .put('/tasks')
                 .send(newTaskDetails)
                 .set('Accept', 'application/json')
             })
