@@ -122,7 +122,4 @@ app.delete('/tasks/:taskId', function(req,res){
 
 })
 
-module.exports = {
-    app: app,
-    resetTasks: resetTasks
-}
+module.exports = app;

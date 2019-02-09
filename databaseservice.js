@@ -9,10 +9,10 @@ function getDatabaseConnection() {
     });
 }
 
-function queryDatabase(sql) {
+function queryDatabase(sql, params) {
     const connection = getDatabaseConnection();
     return new Promise(function(resolve, reject) {
-        connection.query(sql, function(error, results, fields) {
+        connection.query(sql, params, function(error, results, fields) {
             if (error) {
                 connection.destroy();
                 return reject(error);
@@ -28,7 +28,7 @@ function queryDatabase(sql) {
 const databaseService = {
 
     getTasks: function() {
-        const sql = `SELECT * FROM Tasks`
+        const sql = "SELECT * FROM Tasks"
         return queryDatabase(sql)
     },
 
@@ -44,31 +44,40 @@ const databaseService = {
     },
 
     addTask: function(task) {
-        const sql = `INSERT INTO Tasks (taskDescription, taskCompleted, userId) 
-        VALUES (${task["taskDescription"]}, ${task["taskCompleted"]}, ${task["userId"]})`
+        const sql = "INSERT INTO Tasks (taskDescription, taskCompleted, userId) VALUES ?"
+        const params = [[task["taskDescription"], task["taskCompleted"], task["userId"]]]
 
-        return queryDatabase(sql)
+        return queryDatabase(sql, [params])
     },
 
     addUser: function(user) {
-        const sql = `INSERT INTO Tasks (username) 
-        VALUES (${user["username"]})`
+        const sql = `INSERT INTO Tasks (username) VALUES (${user["username"]})`
 
         return queryDatabase(sql)
     }, 
 
     updateTask: function(task){
-        const sql = `UPDATE Tasks SET taskDescription = ${task["taskDescription"]}, taskCompleted = ${task["taskCompleted"]},
-        userId = ${task["userId"]} WHERE taskId = ${task["taskId"]}`
+        const sql = `UPDATE Tasks SET taskDescription = ?, taskCompleted = ?, userId = ? WHERE taskId = ?`
+        const params = [task["taskDescription"], task["taskCompleted"], task["userId"], task["taskId"]]
+
+        return queryDatabase(sql, params)
+    },
+
+
+    deleteTask: function(taskId){
+        const sql = `DELETE FROM Tasks WHERE taskId = ${taskId}`
 
         return queryDatabase(sql)
     },
 
-
-    deleteTask(taskId){
-        const sql = `DELETE FROM Tasks WHERE taskId = ${taskId}`
-
+    defaultDatabase: function(){
+        const sql = "DELETE FROM Tasks"
         return queryDatabase(sql)
+        .then(function(response){
+            const sql = "INSERT INTO Tasks (taskDescription, taskCompleted, userId) VALUES ?"
+            const params = [["feed the cat", 0, 1],["pick up groceries", 0, 1],["cook dinner", 0, 2]]
+            return queryDatabase(sql, [params])
+        })
     }
 }
 
