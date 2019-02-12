@@ -51,14 +51,14 @@ describe("Test routes against local version of express app", ()=>{
             })
             .then(response => JSON.parse(response.text))
             .then(function(body){
-                 expect(body).toMatchObject([{'taskDescription': "feed the cat", 'taskCompleted': 0, 'userId': 1}])
+                 expect(body).toMatchObject({'taskDescription': "feed the cat", 'taskCompleted': 0, 'userId': 1})
              })
          })
     })
 
     describe("Add a new task", ()=>{
         it("receives a success response", ()=>{
-             const taskToAdd ={"taskId":null, "taskDescription":"new task", "taskCompleted": 0, "userId":2};
+             const taskToAdd ={"taskDescription":"new task", "taskCompleted": 0, "userId":2};
              return request(app)
                         .post('/tasks')
                         .send(taskToAdd)
@@ -76,9 +76,9 @@ describe("Test routes against local version of express app", ()=>{
                 return response[0]
             })
             .then(function(task){
-             const newTaskDetails = {"taskId": task["taskId"], "taskDescription": task["taskDescription"], "taskCompleted": 1, "userId": task["userId"]}
+             const newTaskDetails = {"taskDescription": task["taskDescription"], "taskCompleted": 1, "userId": task["userId"]}
              return request(app)
-                .put('/tasks')
+                .put('/tasks/' + task["taskId"])
                 .send(newTaskDetails)
                 .set('Accept', 'application/json')
             })

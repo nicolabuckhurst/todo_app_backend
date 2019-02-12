@@ -6,6 +6,7 @@ const cors = require('cors')
 const app = express();
 
 const databaseService = require('./databaseservice').databaseService
+const Task = require('./task').Task
 
 app.use(cors())
 app.use(bodyparser.json())
@@ -17,8 +18,15 @@ app.use(bodyparser.json())
 app.get('/tasks', function(req, res){
   databaseService.getTasks()
   .then(function(results){
-    //we got tasks ok
-    res.json(results)
+    //convert tasks into an array of Task objects
+    let arrayOfTasks = []
+    let result
+    for(i=0; i<results.length; i++){
+      result = results[i]
+      arrayOfTasks.push(new Task(result.taskDescription, result.userId, result.taskCompleted, result.taskId))
+    }
+    console.log(arrayOfTasks)
+    res.status(200).json(arrayOfTasks)
 
   })
   .catch(function(error){
@@ -32,9 +40,15 @@ app.get('/tasks', function(req, res){
 app.get('/tasks/userid/:userId', function(req, res){
   databaseService.getTasksByUser(req.params.userId)
   .then(function(results){
-    //we got tasks ok
-    res.json(results)
-
+    //turn result into an array of task objects
+    let arrayOfTasks = []
+    let result
+    for(i=0; i<results.length; i++){
+      result = results[i]
+      arrayOfTasks.push(new Task(result.taskDescription, result.userId, result.taskCompleted, result.taskId))
+    }
+    console.log(arrayOfTasks)
+    res.status(200).json(arrayOfTasks)
   })
   .catch(function(error){
     //something went wrong
@@ -46,9 +60,10 @@ app.get('/tasks/userid/:userId', function(req, res){
 app.get('/tasks/:taskId', function(req, res){
   databaseService.getTasksById(req.params.taskId)
   .then(function(results){
-    //we got tasks ok
-    res.json(results)
-
+    //turn result into a single task object
+    let task = new Task(results[0].taskDescription, results[0].userId, results[0].taskCompleted, results[0].taskId)
+    console.log(task)
+    res.status(200).json(task)
   })
   .catch(function(error){
     //something went wrong
@@ -68,9 +83,8 @@ app.post('/tasks', function(req, res){
   }
 
   databaseService.addTask(taskToAdd)
-  .then(function(results){
-    //we got tasks ok
-    res.json(results)
+  .then(function(){
+    res.status(200).json({message:"task added"})
 
   })
   .catch(function(error){
@@ -80,8 +94,9 @@ app.post('/tasks', function(req, res){
 })
 
 //update a task
-app.put('/tasks', function(req,res){
-    
+app.put('/tasks/:taskId', function(req,res){
+  
+  const taskId = req.params.taskId;
   const newTaskDetails = req.body;
 
   try {
@@ -90,10 +105,10 @@ app.put('/tasks', function(req,res){
     res.status(500).send(e);
   }
 
-  databaseService.updateTask(newTaskDetails)
-  .then(function(results){
+  databaseService.updateTask(taskId, newTaskDetails)
+  .then(function(){
     //we got tasks ok
-    res.json(results)
+    res.status(200).json({message:"task updated"})
 
   })
   .catch(function(error){
@@ -107,9 +122,9 @@ app.delete('/tasks/:taskId', function(req,res){
   const taskToDelete = req.params.taskId
   
   databaseService.deleteTask(taskToDelete)
-  .then(function(results){
-    //we got tasks ok
-    res.json(results)
+  .then(function(){
+    
+    res.status(200).json({message:"task deleted"})
 
   })
   .catch(function(error){

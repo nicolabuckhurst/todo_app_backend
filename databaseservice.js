@@ -45,7 +45,7 @@ const databaseService = {
 
     addTask: function(task) {
         const sql = "INSERT INTO Tasks (taskDescription, taskCompleted, userId) VALUES ?"
-        const params = [[task["taskDescription"], task["taskCompleted"], task["userId"]]]
+        const params = [[task.taskDescription, task.taskCompleted, task.userId]]
 
         return queryDatabase(sql, [params])
     },
@@ -56,10 +56,9 @@ const databaseService = {
         return queryDatabase(sql)
     }, 
 
-    updateTask: function(task){
-        const sql = `UPDATE Tasks SET taskDescription = ?, taskCompleted = ?, userId = ? WHERE taskId = ?`
-        const params = [task["taskDescription"], task["taskCompleted"], task["userId"], task["taskId"]]
-
+    updateTask: function(taskId, taskDetails){
+        const sql = "UPDATE Tasks SET ? WHERE taskId = ?"
+        const params = [taskDetails, taskId]
         return queryDatabase(sql, params)
     },
 

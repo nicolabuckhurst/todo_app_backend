@@ -28,7 +28,6 @@ Task {
       taskId: 1215
       } 
 ]
-
 ```
 
 ### GET /tasks/:userId
