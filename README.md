@@ -28,7 +28,6 @@ Task {
       taskId: 1215
       } 
 ]
-
 ```
 
 ### GET /tasks/:userId
@@ -117,4 +116,3 @@ None
 Status: 200
 {message: "task deleted"}
 ```
-
