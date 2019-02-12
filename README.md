@@ -1,6 +1,5 @@
 # Todo_app_backend API
 
-## End-points
 ### GET /tasks
 Returns an array of Task objects
 #### Parameters
