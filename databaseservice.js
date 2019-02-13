@@ -18,8 +18,9 @@ function queryDatabase(sql, params) {
                 return reject(error);
             } 
             else {
-                connection.end();
-                return resolve(results);
+                connection.end(function(err){
+                    return resolve(results);
+                });
             }
         });
     });
