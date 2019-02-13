@@ -98,14 +98,16 @@ app.put('/tasks/:taskId', function(req,res){
   
   const taskId = req.params.taskId;
   const newTaskDetails = req.body;
+  let allowedUpdateDetails
 
-  try {
-    checkTasks.checkJSONTask(newTaskDetails);
+  try{
+    allowedUpdateDetails = checkTasks.createAllowedUpdateDetails(newTaskDetails)
   } catch(e){
-    res.status(500).send(e);
+    res.status(500).json(error)
   }
 
-  databaseService.updateTask(taskId, newTaskDetails)
+
+  databaseService.updateTask(taskId, allowedUpdateDetails)
   .then(function(){
     //we got tasks ok
     res.status(200).json({message:"task updated"})
@@ -123,9 +125,7 @@ app.delete('/tasks/:taskId', function(req,res){
   
   databaseService.deleteTask(taskToDelete)
   .then(function(){
-    
     res.status(200).json({message:"task deleted"})
-
   })
   .catch(function(error){
     //something went wrong

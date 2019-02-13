@@ -8,11 +8,22 @@ const checkJSONTask = function(receivedTask){
         throw "task object is empty"
     }
 
+    console.log(expectedKeys)
+    console.log(receivedKeys)
 
-    for(i=0; i<receivedKeys.length; i++){
-        if(receivedKeys[i] != expectedKeys[i]){
-            throw "did not receive task with valid keys"
+    let checks = {}
+    for(i=0; i<expectedKeys.length; i++){
+        for(j=0; j<receivedKeys.length; j++){
+            if(expectedKeys[i] == receivedKeys[j]){
+               checks[expectedKeys[i]] = true
+            }
         }
+    }
+
+    console.log(Object.keys(checks).length)
+
+    if(Object.keys(checks).length != expectedKeys.length){
+        throw "did not receive task with valid parameters"
     }
       
     for (const key in receivedTask) {
@@ -22,6 +33,29 @@ const checkJSONTask = function(receivedTask){
     }
 }
 
+createAllowedUpdateDetails = function(newTaskDetails){
+
+
+    const allowedUpdateFields = {"taskDescription":"string", "taskCompleted":"number"}
+    
+    const updateFields = {}
+    
+    for(receivedKey in newTaskDetails){
+        for(allowedKey in allowedUpdateFields){
+          if((receivedKey == allowedKey) && (typeof newTaskDetails[receivedKey] == allowedUpdateFields[allowedKey])){
+            updateFields[receivedKey] =  newTaskDetails [receivedKey]
+          } 
+        }
+    }
+
+    if(Object.keys(updateFields).length == 0){
+        throw "did not send a 'taskDescription' or 'taskCompleted' parameter to update"
+    }
+
+    return updateFields
+}
+
 module.exports = {
-    checkJSONTask: checkJSONTask
+    checkJSONTask: checkJSONTask,
+    createAllowedUpdateDetails: createAllowedUpdateDetails
 }
